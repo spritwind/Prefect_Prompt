@@ -1,12 +1,9 @@
-import { describe, it, expect } from "vitest";
 import { readFileSync } from "node:fs";
 import path from "node:path";
 import { parsePrompt } from "@/lib/prompts/parse";
+import { describe, expect, it } from "vitest";
 
-const fixture = readFileSync(
-  path.join(__dirname, "../fixtures/prompts/sample.md"),
-  "utf8",
-);
+const fixture = readFileSync(path.join(__dirname, "../fixtures/prompts/sample.md"), "utf8");
 
 describe("parsePrompt", () => {
   it("extracts metadata from frontmatter", () => {

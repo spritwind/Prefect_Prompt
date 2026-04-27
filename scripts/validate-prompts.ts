@@ -1,5 +1,5 @@
-import { loadAllPrompts } from "@/lib/prompts/load";
 import { extractPlaceholderKeys } from "@/lib/placeholders/render";
+import { loadAllPrompts } from "@/lib/prompts/load";
 
 function fail(msg: string): never {
   console.error(`\n❌ Prompt validation failed:\n   ${msg}\n`);

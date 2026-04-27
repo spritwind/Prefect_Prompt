@@ -1,5 +1,5 @@
-import MiniSearch from "minisearch";
 import type { PromptDoc } from "@/lib/prompts/types";
+import MiniSearch from "minisearch";
 import type { SearchDoc } from "./types";
 
 export function promptToSlug(p: PromptDoc): string {

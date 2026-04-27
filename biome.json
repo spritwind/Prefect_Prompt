@@ -8,6 +8,7 @@
     "enabled": true,
     "rules": {
       "recommended": true,
+      "a11y": { "useValidLang": "off" },
       "style": { "noNonNullAssertion": "off" },
       "suspicious": { "noExplicitAny": "warn" }
     }

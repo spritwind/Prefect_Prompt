@@ -1,8 +1,8 @@
 "use client";
 
+import { createSupabaseBrowserClient } from "@/lib/supabase/client";
 import { useSearchParams } from "next/navigation";
 import { Suspense } from "react";
-import { createSupabaseBrowserClient } from "@/lib/supabase/client";
 
 function LoginInner() {
   const params = useSearchParams();
@@ -25,9 +25,7 @@ function LoginInner() {
       {error === "not_allowed" && (
         <p className="text-red-400 text-sm font-mono">未授權的 GitHub 帳號</p>
       )}
-      {error === "oauth" && (
-        <p className="text-red-400 text-sm font-mono">登入失敗，請重試</p>
-      )}
+      {error === "oauth" && <p className="text-red-400 text-sm font-mono">登入失敗，請重試</p>}
       <button
         type="button"
         onClick={signIn}

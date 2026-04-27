@@ -1,19 +1,73 @@
+import type { PlaceholderSchema } from "@/lib/placeholders/types";
 import matter from "gray-matter";
 import { z } from "zod";
 import type { PromptDoc } from "./types";
-import type { PlaceholderSchema } from "@/lib/placeholders/types";
 
 const placeholderSchemaZ: z.ZodType<PlaceholderSchema> = z.discriminatedUnion("type", [
-  z.object({ type: z.literal("text"), label: z.string(), hint: z.string().optional(), default: z.string().optional() }),
-  z.object({ type: z.literal("multiline"), label: z.string(), hint: z.string().optional(), default: z.string().optional() }),
-  z.object({ type: z.literal("number"), label: z.string(), hint: z.string().optional(), default: z.number().optional(), suggestions: z.array(z.number()).optional() }),
-  z.object({ type: z.literal("select"), label: z.string(), hint: z.string().optional(), options: z.array(z.union([z.string(), z.number()])), default: z.union([z.string(), z.number()]).optional() }),
-  z.object({ type: z.literal("boolean"), label: z.string(), hint: z.string().optional(), default: z.boolean().optional() }),
-  z.object({ type: z.literal("multiselect"), label: z.string(), hint: z.string().optional(), options: z.array(z.string()), default: z.array(z.string()).optional() }),
-  z.object({ type: z.literal("date"), label: z.string(), hint: z.string().optional(), default: z.string().optional() }),
-  z.object({ type: z.literal("code"), label: z.string(), hint: z.string().optional(), language: z.string().optional(), default: z.string().optional() }),
-  z.object({ type: z.literal("list"), label: z.string(), hint: z.string().optional(), default: z.array(z.string()).optional() }),
-  z.object({ type: z.literal("file-ref"), label: z.string(), hint: z.string().optional(), default: z.string().optional() }),
+  z.object({
+    type: z.literal("text"),
+    label: z.string(),
+    hint: z.string().optional(),
+    default: z.string().optional(),
+  }),
+  z.object({
+    type: z.literal("multiline"),
+    label: z.string(),
+    hint: z.string().optional(),
+    default: z.string().optional(),
+  }),
+  z.object({
+    type: z.literal("number"),
+    label: z.string(),
+    hint: z.string().optional(),
+    default: z.number().optional(),
+    suggestions: z.array(z.number()).optional(),
+  }),
+  z.object({
+    type: z.literal("select"),
+    label: z.string(),
+    hint: z.string().optional(),
+    options: z.array(z.union([z.string(), z.number()])),
+    default: z.union([z.string(), z.number()]).optional(),
+  }),
+  z.object({
+    type: z.literal("boolean"),
+    label: z.string(),
+    hint: z.string().optional(),
+    default: z.boolean().optional(),
+  }),
+  z.object({
+    type: z.literal("multiselect"),
+    label: z.string(),
+    hint: z.string().optional(),
+    options: z.array(z.string()),
+    default: z.array(z.string()).optional(),
+  }),
+  z.object({
+    type: z.literal("date"),
+    label: z.string(),
+    hint: z.string().optional(),
+    default: z.string().optional(),
+  }),
+  z.object({
+    type: z.literal("code"),
+    label: z.string(),
+    hint: z.string().optional(),
+    language: z.string().optional(),
+    default: z.string().optional(),
+  }),
+  z.object({
+    type: z.literal("list"),
+    label: z.string(),
+    hint: z.string().optional(),
+    default: z.array(z.string()).optional(),
+  }),
+  z.object({
+    type: z.literal("file-ref"),
+    label: z.string(),
+    hint: z.string().optional(),
+    default: z.string().optional(),
+  }),
 ]);
 
 const frontmatterZ = z.object({

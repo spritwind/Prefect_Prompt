@@ -27,11 +27,6 @@ export type PlaceholderSchema =
   | (BaseSchema & { type: "list"; default?: string[] })
   | (BaseSchema & { type: "file-ref"; default?: string });
 
-export type PlaceholderValue =
-  | string
-  | number
-  | boolean
-  | string[]
-  | undefined;
+export type PlaceholderValue = string | number | boolean | string[] | undefined;
 
 export type PlaceholderValues = Record<string, PlaceholderValue>;

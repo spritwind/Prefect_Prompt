@@ -1,7 +1,7 @@
-import { describe, it, expect } from "vitest";
 import { renderTemplate } from "@/lib/placeholders/render";
-import { validateValues } from "@/lib/placeholders/validate";
 import type { PlaceholderSchema } from "@/lib/placeholders/types";
+import { validateValues } from "@/lib/placeholders/validate";
+import { describe, expect, it } from "vitest";
 
 const schema: Record<string, PlaceholderSchema> = {
   PHASE_N: { type: "number", label: "Phase", default: 9 },
@@ -17,15 +17,13 @@ describe("renderTemplate", () => {
   });
 
   it("substitutes multiple placeholders", () => {
-    expect(
-      renderTemplate("{TITLE}: {LANE_NAME}", { TITLE: "Lane", LANE_NAME: "法人面" }),
-    ).toBe("Lane: 法人面");
+    expect(renderTemplate("{TITLE}: {LANE_NAME}", { TITLE: "Lane", LANE_NAME: "法人面" })).toBe(
+      "Lane: 法人面",
+    );
   });
 
   it("leaves undefined placeholders untouched", () => {
-    expect(renderTemplate("Phase {PHASE_N} {MISSING}", { PHASE_N: 9 })).toBe(
-      "Phase 9 {MISSING}",
-    );
+    expect(renderTemplate("Phase {PHASE_N} {MISSING}", { PHASE_N: 9 })).toBe("Phase 9 {MISSING}");
   });
 
   it("renders boolean as yes/no", () => {

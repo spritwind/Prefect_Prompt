@@ -12,9 +12,7 @@ function stringify(value: unknown): string {
 
 export function renderTemplate(template: string, values: PlaceholderValues): string {
   // 1. Protect escaped braces
-  const protectedTpl = template
-    .replaceAll("\\{", ESCAPED_OPEN)
-    .replaceAll("\\}", ESCAPED_CLOSE);
+  const protectedTpl = template.replaceAll("\\{", ESCAPED_OPEN).replaceAll("\\}", ESCAPED_CLOSE);
 
   // 2. Substitute {KEY} where KEY exists in values
   const substituted = protectedTpl.replace(/\{([A-Z][A-Z0-9_]*)\}/g, (match, key) => {

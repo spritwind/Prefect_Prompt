@@ -1,8 +1,6 @@
 import type { PlaceholderSchema, PlaceholderValues } from "./types";
 
-export type ValidationResult =
-  | { ok: true }
-  | { ok: false; errors: Record<string, string> };
+export type ValidationResult = { ok: true } | { ok: false; errors: Record<string, string> };
 
 export function validateValues(
   schema: Record<string, PlaceholderSchema>,
