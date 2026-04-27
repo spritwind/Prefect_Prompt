@@ -22,3 +22,6 @@ test-results/
 
 # Node
 node_modules/
+
+# TypeScript
+*.tsbuildinfo
