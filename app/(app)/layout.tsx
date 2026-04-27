@@ -1,3 +1,4 @@
+import { CommandPalette } from "@/components/command-palette/CommandPalette";
 import { ToastProvider } from "@/components/ui/Toast";
 import { isAllowed } from "@/lib/auth/allowlist";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
@@ -12,5 +13,10 @@ export default async function AppLayout({ children }: { children: React.ReactNod
   const login =
     typeof user.user_metadata?.user_name === "string" ? user.user_metadata.user_name : undefined;
   if (!isAllowed(login)) redirect("/login?error=not_allowed");
-  return <ToastProvider>{children}</ToastProvider>;
+  return (
+    <ToastProvider>
+      <CommandPalette />
+      {children}
+    </ToastProvider>
+  );
 }
