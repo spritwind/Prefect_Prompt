@@ -8,5 +8,6 @@ export default defineConfig({
     setupFiles: ["./tests/setup.ts"],
     include: ["tests/unit/**/*.test.{ts,tsx}"],
   },
+  esbuild: { jsx: "automatic" },
   resolve: { alias: { "@": path.resolve(__dirname, ".") } },
 });
