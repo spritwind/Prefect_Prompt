@@ -5,6 +5,7 @@ next-env.d.ts
 
 # Build artifacts
 public/search/index.json
+public/search/docs.json
 
 # Env
 .env
