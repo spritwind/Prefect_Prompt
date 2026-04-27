@@ -176,3 +176,40 @@ Day 2:
 3. Changelog 加新 entry
 
 來源 SSOT: scripts/composite_meta_constants.py (Python) + memory/track_ab_baselines.md (Markdown).
+
+---
+
+## Web App (Prompt Hub)
+
+This repo doubles as the content source for a Next.js app on Vercel that surfaces prompts as forms with copy-ready output.
+
+### Local Development
+
+```bash
+pnpm install
+cp .env.example .env.local   # fill Supabase + GitHub allowlist values
+pnpm validate:prompts        # sanity check frontmatter
+pnpm build:search            # generate search index
+pnpm dev                     # http://localhost:3000
+```
+
+### Deployment
+
+1. **Supabase**: create project → SQL Editor → run `supabase/migrations/0001_init.sql` → enable GitHub OAuth provider in Auth settings → add Vercel deploy URL to redirect URLs allowlist
+2. **Vercel**: import this GitHub repo → set env vars from `.env.example` → deploy
+3. **Allowlist**: set `ALLOWED_GITHUB_LOGINS=<comma-separated GitHub logins>` in Vercel env
+
+Updates to prompts: `git push` triggers Vercel rebuild + ISR revalidate. New prompts appear within 60 seconds.
+
+### Adding a New Prompt
+
+1. Create `prompts/<category>/<slug>.md` with frontmatter (id, title, category, tags, placeholders)
+2. `pnpm validate:prompts` to catch frontmatter errors locally
+3. Commit + push
+
+### Adding a New Operator
+
+1. Add their GitHub login to `ALLOWED_GITHUB_LOGINS` env var on Vercel
+2. Redeploy (or just save — Vercel reuses build but new env applies on next request)
+
+See `docs/superpowers/specs/2026-04-27-prompt-hub-design.md` §11 for full usage guide.
