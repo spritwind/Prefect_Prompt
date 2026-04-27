@@ -7,6 +7,10 @@ export const metadata: Metadata = {
   title: "Prompt Hub",
   description: "Personal prompt management for AI workflows",
   manifest: "/manifest.json",
+  icons: {
+    icon: [{ url: "/icons/icon-192.png", sizes: "192x192" }],
+    apple: "/icons/apple-touch-icon.png",
+  },
   appleWebApp: { capable: true, statusBarStyle: "black-translucent", title: "Prompt Hub" },
 };
 
