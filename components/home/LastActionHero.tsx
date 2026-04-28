@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 
 interface LastAction {
   promptId: string;
+  slug: string;
   presetId: string | null;
   values: Record<string, unknown>;
   title: string;
@@ -50,7 +51,7 @@ export function LastActionHero() {
 
   return (
     <section className="flex flex-col gap-4 py-8">
-      <Link href={`/prompts/${last.promptId}` as Route} className="block">
+      <Link href={`/prompts/${last.slug}` as Route} className="block">
         <p className="font-mono text-2xl">{last.title}</p>
         <p className="font-mono text-xs text-fg/60 mt-1">
           {last.promptId} · {formatAgo(last.ts)}
