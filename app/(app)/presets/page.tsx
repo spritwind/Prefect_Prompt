@@ -3,7 +3,6 @@
 import { Pencil, Trash2 } from "lucide-react";
 import type { Route } from "next";
 import Link from "next/link";
-import { useEffect, useState } from "react";
 
 interface Preset {
   id: string;
@@ -13,37 +12,9 @@ interface Preset {
   updated_at: string;
 }
 
+// TODO(R6): switch to localStorage
 export default function PresetsPage() {
-  const [presets, setPresets] = useState<Preset[]>([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    fetch("/api/presets")
-      .then((r) => r.json())
-      .then((d) => {
-        setPresets(d.presets ?? []);
-        setLoading(false);
-      });
-  }, []);
-
-  async function rename(p: Preset) {
-    const name = window.prompt("新名稱", p.name);
-    if (!name || name === p.name) return;
-    const res = await fetch(`/api/presets/${p.id}`, {
-      method: "PATCH",
-      headers: { "content-type": "application/json" },
-      body: JSON.stringify({ name }),
-    });
-    if (res.ok) setPresets((arr) => arr.map((x) => (x.id === p.id ? { ...x, name } : x)));
-  }
-
-  async function remove(p: Preset) {
-    if (!window.confirm(`刪除 preset「${p.name}」?`)) return;
-    const res = await fetch(`/api/presets/${p.id}`, { method: "DELETE" });
-    if (res.ok) setPresets((arr) => arr.filter((x) => x.id !== p.id));
-  }
-
-  if (loading) return <main className="p-6 font-mono text-muted">Loading...</main>;
+  const presets: Preset[] = [];
 
   return (
     <main className="max-w-2xl mx-auto px-4 py-6 flex flex-col gap-4">
@@ -64,17 +35,17 @@ export default function PresetsPage() {
             <div className="flex gap-2">
               <button
                 type="button"
-                onClick={() => rename(p)}
+                disabled
                 aria-label="Rename"
-                className="p-2 text-muted hover:text-fg"
+                className="p-2 text-muted hover:text-fg disabled:opacity-50"
               >
                 <Pencil className="size-4" />
               </button>
               <button
                 type="button"
-                onClick={() => remove(p)}
+                disabled
                 aria-label="Delete"
-                className="p-2 text-muted hover:text-red-400"
+                className="p-2 text-muted hover:text-red-400 disabled:opacity-50"
               >
                 <Trash2 className="size-4" />
               </button>

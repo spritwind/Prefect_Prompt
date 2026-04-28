@@ -3,7 +3,7 @@
 import { useToast } from "@/components/ui/Toast";
 import { renderTemplate } from "@/lib/placeholders/render";
 import type { PlaceholderSchema, PlaceholderValues } from "@/lib/placeholders/types";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { CopyButton } from "./CopyButton";
 import { PlaceholderForm } from "./PlaceholderForm";
 import { PresetSelector, type PresetSummary } from "./PresetSelector";
@@ -27,18 +27,9 @@ function defaultValues(schema: Record<string, PlaceholderSchema>): PlaceholderVa
 export function PromptDetailClient({ promptId, title, body, schema }: Props) {
   const { show } = useToast();
   const [values, setValues] = useState<PlaceholderValues>(() => defaultValues(schema));
-  const [presets, setPresets] = useState<PresetSummary[]>([]);
+  // TODO(R6): switch to localStorage
+  const [presets] = useState<PresetSummary[]>([]);
   const [currentPresetId, setCurrentPresetId] = useState<string | null>(null);
-
-  useEffect(() => {
-    fetch("/api/presets")
-      .then((r) => r.json())
-      .then((d) => {
-        const all = (d.presets ?? []) as Array<PresetSummary & { prompt_id: string }>;
-        setPresets(all.filter((p) => p.prompt_id === promptId));
-      })
-      .catch(() => {});
-  }, [promptId]);
 
   function selectPreset(id: string) {
     const p = presets.find((x) => x.id === id);
@@ -47,32 +38,15 @@ export function PromptDetailClient({ promptId, title, body, schema }: Props) {
     setValues({ ...defaultValues(schema), ...p.values });
   }
 
-  async function savePreset() {
-    const name = window.prompt("Preset 名稱?");
-    if (!name) return;
-    const res = await fetch("/api/presets", {
-      method: "POST",
-      headers: { "content-type": "application/json" },
-      body: JSON.stringify({ prompt_id: promptId, name, values }),
-    });
-    if (!res.ok) {
-      show("⚠ 儲存失敗");
-      return;
-    }
-    const { preset } = await res.json();
-    setPresets((p) => [{ id: preset.id, name: preset.name, values: preset.values }, ...p]);
-    setCurrentPresetId(preset.id);
-    show(`✓ 已存 preset「${name}」`);
+  // TODO(R6): switch to localStorage
+  function savePreset() {
+    show("preset 儲存改 R6 接 localStorage");
   }
 
   const rendered = renderTemplate(body, values);
 
   function logRecentUse() {
-    fetch("/api/recent-uses", {
-      method: "POST",
-      headers: { "content-type": "application/json" },
-      body: JSON.stringify({ prompt_id: promptId, preset_id: currentPresetId }),
-    }).catch(() => {});
+    // TODO(R6): switch to localStorage
     if (typeof window !== "undefined") {
       localStorage.setItem(
         "lastAction",
