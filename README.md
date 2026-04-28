@@ -181,35 +181,45 @@ Day 2:
 
 ## Web App (Prompt Hub)
 
-This repo doubles as the content source for a Next.js app on Vercel that surfaces prompts as forms with copy-ready output.
+Vercel-hosted, mobile-first web UI for these prompts. **Zero database** — prompts live in this git repo (SSOT), personal preset state lives in browser localStorage, cross-device sync uses URL + QR code.
 
 ### Local Development
 
 ```bash
 pnpm install
-cp .env.example .env.local   # fill Supabase + GitHub allowlist values
-pnpm validate:prompts        # sanity check frontmatter
-pnpm build:search            # generate search index
-pnpm dev                     # http://localhost:3000
+echo "APP_PASSWORD=test123" > .env.local    # any password you choose
+pnpm validate:prompts                       # sanity check frontmatter
+pnpm build:search                           # generate search index
+pnpm dev                                    # http://localhost:3000
 ```
 
 ### Deployment
 
-1. **Supabase**: create project → SQL Editor → run `supabase/migrations/0001_init.sql` → enable GitHub OAuth provider in Auth settings → add Vercel deploy URL to redirect URLs allowlist
-2. **Vercel**: import this GitHub repo → set env vars from `.env.example` → deploy
-3. **Allowlist**: set `ALLOWED_GITHUB_LOGINS=<comma-separated GitHub logins>` in Vercel env
+1. Create a Vercel project from this GitHub repo
+2. Set env var **`APP_PASSWORD`** to your chosen password (Settings → Environment Variables)
+3. Deploy
 
-Updates to prompts: `git push` triggers Vercel rebuild + ISR revalidate. New prompts appear within 60 seconds.
+That's it — no Supabase, no OAuth, no DB migration. Updates to prompts: `git push` triggers Vercel rebuild + ISR revalidate; new prompts appear within ~60 seconds.
 
 ### Adding a New Prompt
 
-1. Create `prompts/<category>/<slug>.md` with frontmatter (id, title, category, tags, placeholders)
+1. Create `prompts/<category>/<slug>.md` with frontmatter (id, title, category, tags, placeholders, optional examples)
 2. `pnpm validate:prompts` to catch frontmatter errors locally
 3. Commit + push
 
+### Sharing Across Devices
+
+- **From desktop**: open prompt → fill values → click **📲 Send to phone** → QR appears
+- **From mobile**: open camera → scan QR → prompt opens with values pre-filled → tap **COPY**
+
+The share URL embeds the placeholder values as a base64 token (`?p=...`), so no server-side state is needed.
+
 ### Adding a New Operator
 
-1. Add their GitHub login to `ALLOWED_GITHUB_LOGINS` env var on Vercel
-2. Redeploy (or just save — Vercel reuses build but new env applies on next request)
+Share the `APP_PASSWORD` value. Rotate by changing the Vercel env var (auto-invalidates all sessions on next request).
 
-See `docs/superpowers/specs/2026-04-27-prompt-hub-design.md` §11 for full usage guide.
+### Shared Templates (Examples)
+
+To make a preset available to all operators (e.g. "Phase 9 / Lane 3 / 籌碼-分點"), add it to the `examples:` field in the prompt's frontmatter. Examples appear at the top of the prompt detail page above personal presets.
+
+See `docs/superpowers/specs/2026-04-27-prompt-hub-design.md` for the full design rationale (note: spec was written for the original Supabase-backed architecture; the v2 zero-DB approach is documented in commits `da2db51` through this commit).
