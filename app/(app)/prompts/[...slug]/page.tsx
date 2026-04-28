@@ -31,6 +31,7 @@ export default async function PromptPage({
   return (
     <PromptDetailClient
       promptId={prompt.id}
+      slug={slugPath}
       title={prompt.title}
       body={prompt.body}
       schema={prompt.placeholders}
