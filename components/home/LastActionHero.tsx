@@ -5,6 +5,10 @@ import type { Route } from "next";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
+function openCommandPalette() {
+  window.dispatchEvent(new Event("open-command-palette"));
+}
+
 interface LastAction {
   promptId: string;
   slug: string;
@@ -40,11 +44,16 @@ export function LastActionHero() {
 
   if (!last) {
     return (
-      <section className="text-center py-12">
+      <section className="text-center py-12 flex flex-col gap-3 items-center">
         <p className="font-mono text-fg/60">尚未使用任何 Prompt</p>
-        <Link href={"/" as Route} className="font-mono text-accent text-sm mt-2 inline-block">
-          瀏覽 Prompt →
-        </Link>
+        <button
+          type="button"
+          onClick={openCommandPalette}
+          className="font-mono text-sm text-bg bg-accent px-4 py-2 rounded-md hover:opacity-90"
+        >
+          🔍 瀏覽 Prompt
+        </button>
+        <p className="font-mono text-xs text-muted">桌機 Cmd/Ctrl+K · 手機下拉</p>
       </section>
     );
   }
