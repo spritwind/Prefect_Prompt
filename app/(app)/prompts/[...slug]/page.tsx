@@ -2,9 +2,6 @@ import { PromptDetailClient } from "@/components/prompt/PromptDetailClient";
 import { loadAllPrompts } from "@/lib/prompts/load";
 import { notFound } from "next/navigation";
 
-export const dynamic = "force-static";
-export const revalidate = 60;
-
 export async function generateStaticParams() {
   const prompts = loadAllPrompts();
   return prompts.map((p) => ({
