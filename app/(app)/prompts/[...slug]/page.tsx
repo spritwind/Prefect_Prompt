@@ -35,6 +35,7 @@ export default async function PromptPage({
       title={prompt.title}
       body={prompt.body}
       schema={prompt.placeholders}
+      examples={prompt.examples}
     />
   );
 }

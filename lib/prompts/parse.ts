@@ -1,7 +1,7 @@
-import type { PlaceholderSchema } from "@/lib/placeholders/types";
+import type { PlaceholderSchema, PlaceholderValues } from "@/lib/placeholders/types";
 import matter from "gray-matter";
 import { z } from "zod";
-import type { PromptDoc } from "./types";
+import type { PromptDoc, PromptExample } from "./types";
 
 const placeholderSchemaZ: z.ZodType<PlaceholderSchema> = z.discriminatedUnion("type", [
   z.object({
@@ -70,6 +70,11 @@ const placeholderSchemaZ: z.ZodType<PlaceholderSchema> = z.discriminatedUnion("t
   }),
 ]);
 
+const exampleZ = z.object({
+  name: z.string().min(1),
+  values: z.record(z.unknown()),
+});
+
 const frontmatterZ = z.object({
   id: z.string().regex(/^[a-z0-9][a-z0-9-]*$/, "id must be kebab-case"),
   title: z.string().min(1),
@@ -79,6 +84,7 @@ const frontmatterZ = z.object({
   estimated_time: z.string().optional(),
   agent_count: z.string().optional(),
   placeholders: z.record(placeholderSchemaZ).default({}),
+  examples: z.array(exampleZ).optional(),
 });
 
 export function parsePrompt(rawMarkdown: string, filePath: string): PromptDoc {
@@ -88,5 +94,11 @@ export function parsePrompt(rawMarkdown: string, filePath: string): PromptDoc {
     const issues = parsed.error.issues.map((i) => `${i.path.join(".")}: ${i.message}`).join("; ");
     throw new Error(`Invalid frontmatter in ${filePath}: ${issues}`);
   }
-  return { ...parsed.data, body: content, filePath };
+  const examples = parsed.data.examples?.map(
+    (ex): PromptExample => ({
+      name: ex.name,
+      values: ex.values as PlaceholderValues,
+    }),
+  );
+  return { ...parsed.data, examples, body: content, filePath };
 }

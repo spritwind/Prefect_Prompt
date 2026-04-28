@@ -9,6 +9,7 @@ import {
   getPresetsForPrompt,
   savePreset as savePresetLocal,
 } from "@/lib/presets/local";
+import type { PromptExample } from "@/lib/prompts/types";
 import { decodePresetValues, encodePresetValues } from "@/lib/share/url";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -23,6 +24,7 @@ interface Props {
   title: string;
   body: string;
   schema: Record<string, PlaceholderSchema>;
+  examples?: PromptExample[];
 }
 
 function defaultValues(schema: Record<string, PlaceholderSchema>): PlaceholderValues {
@@ -39,7 +41,7 @@ function toSummary(p: LocalPreset): PresetSummary {
   return { id: p.id, name: p.name, values: p.values };
 }
 
-export function PromptDetailClient({ promptId, slug, title, body, schema }: Props) {
+export function PromptDetailClient({ promptId, slug, title, body, schema, examples }: Props) {
   const { show } = useToast();
   const searchParams = useSearchParams();
   const [values, setValues] = useState<PlaceholderValues>(() => defaultValues(schema));
@@ -67,6 +69,12 @@ export function PromptDetailClient({ promptId, slug, title, body, schema }: Prop
     if (!p) return;
     setCurrentPresetId(id);
     setValues({ ...defaultValues(schema), ...p.values });
+  }
+
+  function applyExample(ex: PromptExample) {
+    setValues({ ...defaultValues(schema), ...(ex.values as PlaceholderValues) });
+    setCurrentPresetId(null);
+    show(`✓ 已套用 example「${ex.name}」`);
   }
 
   function savePreset() {
@@ -121,6 +129,24 @@ export function PromptDetailClient({ promptId, slug, title, body, schema }: Prop
       <header>
         <h1 className="font-mono text-xl">{title}</h1>
       </header>
+
+      {examples && examples.length > 0 && (
+        <section className="flex flex-col gap-2">
+          <h3 className="text-xs font-mono text-fg/70 uppercase">Examples (團隊模板)</h3>
+          <div className="flex flex-wrap gap-2">
+            {examples.map((ex, i) => (
+              <button
+                type="button"
+                key={`${ex.name}-${i}`}
+                onClick={() => applyExample(ex)}
+                className="px-3 py-2 rounded font-mono text-sm border border-fg/10 hover:border-accent/60"
+              >
+                {ex.name}
+              </button>
+            ))}
+          </div>
+        </section>
+      )}
 
       {hydrated && (
         <PresetSelector

@@ -1,4 +1,9 @@
-import type { PlaceholderSchema } from "@/lib/placeholders/types";
+import type { PlaceholderSchema, PlaceholderValues } from "@/lib/placeholders/types";
+
+export interface PromptExample {
+  name: string;
+  values: PlaceholderValues;
+}
 
 export interface PromptDoc {
   id: string;
@@ -9,6 +14,7 @@ export interface PromptDoc {
   estimated_time?: string;
   agent_count?: string;
   placeholders: Record<string, PlaceholderSchema>;
+  examples?: PromptExample[];
   body: string;
   filePath: string;
 }

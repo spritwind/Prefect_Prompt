@@ -30,6 +30,21 @@ placeholders:
     label: final 因子數
     default: 20
     hint: "大 lane 20 / 小 lane 10 (整體 < 30)"
+examples:
+  - name: "Phase 9 / Lane 3 / 籌碼-分點"
+    values:
+      PHASE_N: 9
+      LANE_X: 3
+      LANE_NAME: 籌碼-分點
+      TIME_BUDGET_MIN: 90
+      N_FACTORS_TARGET: 20
+  - name: "Phase 10 / Lane 1 / 法人面"
+    values:
+      PHASE_N: 10
+      LANE_X: 1
+      LANE_NAME: 法人面
+      TIME_BUDGET_MIN: 90
+      N_FACTORS_TARGET: 20
 ---
 
 # 01 因子發想 — 多 Agent 平行 Prompt

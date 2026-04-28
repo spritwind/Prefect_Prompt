@@ -34,4 +34,32 @@ describe("parsePrompt", () => {
     const bad = "---\nid: x\n---\nbody";
     expect(() => parsePrompt(bad, "x.md")).toThrow(/title/);
   });
+
+  it("parses examples from frontmatter", () => {
+    const md = `---
+id: ex-test
+title: Example Test
+category: general/test
+examples:
+  - name: "Sample 1"
+    values:
+      X: 1
+      Y: hello
+---
+body`;
+    const doc = parsePrompt(md, "x.md");
+    expect(doc.examples).toHaveLength(1);
+    expect(doc.examples?.[0]).toEqual({ name: "Sample 1", values: { X: 1, Y: "hello" } });
+  });
+
+  it("examples are optional", () => {
+    const md = `---
+id: ex-none
+title: No Examples
+category: general/test
+---
+body`;
+    const doc = parsePrompt(md, "x.md");
+    expect(doc.examples).toBeUndefined();
+  });
 });
