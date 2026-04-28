@@ -39,15 +39,6 @@ export function CommandPalette() {
 
   return (
     <Dialog.Root open={open} onOpenChange={setOpen}>
-      <Dialog.Trigger asChild>
-        <button
-          type="button"
-          aria-label="Open search"
-          className="fixed top-3 right-3 z-30 size-10 rounded-full bg-fg/10 flex items-center justify-center"
-        >
-          <Search className="size-5" />
-        </button>
-      </Dialog.Trigger>
       <Dialog.Portal>
         <Dialog.Overlay className="fixed inset-0 bg-black/70 z-40 data-[state=open]:animate-in data-[state=open]:fade-in" />
         <Dialog.Content

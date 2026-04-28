@@ -1,4 +1,5 @@
 import { CommandPalette } from "@/components/command-palette/CommandPalette";
+import { TopNav } from "@/components/nav/TopNav";
 import { ToastProvider } from "@/components/ui/Toast";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
@@ -15,6 +16,7 @@ export default async function AppLayout({ children }: { children: React.ReactNod
   return (
     <ToastProvider>
       <CommandPalette />
+      <TopNav />
       {children}
     </ToastProvider>
   );
