@@ -16,6 +16,7 @@
     "build:search": "tsx scripts/build-search-index.ts"
   },
   "dependencies": {
+    "@octokit/rest": "^22.0.1",
     "@radix-ui/react-dialog": "^1.1.2",
     "@radix-ui/react-switch": "^1.1.1",
     "@radix-ui/react-toast": "^1.2.2",

@@ -2,10 +2,14 @@ import { type NextRequest, NextResponse } from "next/server";
 
 export async function POST(request: NextRequest) {
   const form = await request.formData();
+  const username = String(form.get("username") ?? "").trim();
   const password = String(form.get("password") ?? "");
   const redirect = String(form.get("redirect") ?? "/");
   const expected = process.env.APP_PASSWORD ?? "";
 
+  if (!username || !password) {
+    return NextResponse.redirect(new URL("/login?error=missing", request.url), { status: 303 });
+  }
   if (!expected || password !== expected) {
     return NextResponse.redirect(new URL("/login?error=wrong", request.url), { status: 303 });
   }
@@ -18,6 +22,13 @@ export async function POST(request: NextRequest) {
     sameSite: "lax",
     path: "/",
     maxAge: 60 * 60 * 24 * 30, // 30 days
+  });
+  res.cookies.set("ph_username", username, {
+    httpOnly: false, // client may display
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "lax",
+    path: "/",
+    maxAge: 60 * 60 * 24 * 365, // 1 year — survives sign out
   });
   return res;
 }

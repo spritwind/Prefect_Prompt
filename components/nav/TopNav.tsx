@@ -6,7 +6,11 @@ import Link from "next/link";
 import { useState } from "react";
 import { MenuDrawer } from "./MenuDrawer";
 
-export function TopNav() {
+interface Props {
+  username?: string;
+}
+
+export function TopNav({ username }: Props) {
   const [menuOpen, setMenuOpen] = useState(false);
 
   function openSearch() {
@@ -27,7 +31,10 @@ export function TopNav() {
             <span className="text-accent">⌘</span>
             <span>Prompt Hub</span>
           </Link>
-          <div className="flex items-center gap-1">
+          <div className="flex items-center gap-2">
+            {username && (
+              <span className="hidden sm:inline font-mono text-xs text-muted">@{username}</span>
+            )}
             <button
               type="button"
               onClick={openSearch}
@@ -47,7 +54,7 @@ export function TopNav() {
           </div>
         </div>
       </header>
-      <MenuDrawer open={menuOpen} onOpenChange={setMenuOpen} />
+      <MenuDrawer open={menuOpen} onOpenChange={setMenuOpen} username={username} />
     </>
   );
 }

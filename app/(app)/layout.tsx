@@ -13,10 +13,11 @@ export default async function AppLayout({ children }: { children: React.ReactNod
   if (!expected || !session || session !== expected) {
     redirect("/login");
   }
+  const username = cookieStore.get("ph_username")?.value ?? "";
   return (
     <ToastProvider>
       <CommandPalette />
-      <TopNav />
+      <TopNav username={username} />
       {children}
     </ToastProvider>
   );

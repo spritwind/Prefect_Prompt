@@ -1,13 +1,14 @@
 "use client";
 
 import * as Dialog from "@radix-ui/react-dialog";
-import { Bookmark, Home, LogOut, type LucideIcon, Settings, X } from "lucide-react";
+import { Bookmark, Home, LogOut, type LucideIcon, Plus, Settings, X } from "lucide-react";
 import type { Route } from "next";
 import Link from "next/link";
 
 interface Props {
   open: boolean;
   onOpenChange: (next: boolean) => void;
+  username?: string;
 }
 
 interface NavItem {
@@ -18,11 +19,12 @@ interface NavItem {
 
 const items: NavItem[] = [
   { href: "/" as Route, label: "Library", icon: Home },
+  { href: "/upload" as Route, label: "New Prompt", icon: Plus },
   { href: "/presets" as Route, label: "My Presets", icon: Bookmark },
   { href: "/settings" as Route, label: "Settings", icon: Settings },
 ];
 
-export function MenuDrawer({ open, onOpenChange }: Props) {
+export function MenuDrawer({ open, onOpenChange, username }: Props) {
   return (
     <Dialog.Root open={open} onOpenChange={onOpenChange}>
       <Dialog.Portal>
@@ -35,7 +37,10 @@ export function MenuDrawer({ open, onOpenChange }: Props) {
           }}
         >
           <div className="flex items-center justify-between p-4 border-b border-fg/10">
-            <Dialog.Title className="font-mono text-sm">Menu</Dialog.Title>
+            <Dialog.Title className="flex flex-col">
+              <span className="font-mono text-sm">Menu</span>
+              {username && <span className="font-mono text-[11px] text-muted">@{username}</span>}
+            </Dialog.Title>
             <Dialog.Close asChild>
               <button
                 type="button"
